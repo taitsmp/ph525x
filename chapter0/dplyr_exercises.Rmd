@@ -1,0 +1,39 @@
+---
+title: "dpylr exercises"
+output: html_notebook
+---
+
+Pronounced "Deep Liar"
+
+```{r}
+library(dplyr)
+```
+```{r}
+library(ggplot2)
+data(msleep)
+```
+
+* https://seandavi.github.io/ITR/dplyr_intro_msleep.html
+* https://ggplot2.tidyverse.org/reference/msleep.html
+
+2. Now use the filter function to select only the primates. How many animals in the table are primates? Hint: the nrow function gives you the number of rows of a data frame or matrix.
+
+```{r}
+primates <- filter(msleep, order=="Primates")
+nrow(primates)
+```
+
+3. What is the class of the object you obtain after subsetting the table to only include primates?
+
+```{r}
+class(primates)
+```
+
+Now use the `select` function to extract the sleep (total) for the primates. What class is this object? Hint: use `%>%` to pipe the results of the `filter` function to `select`.
+
+```{r}
+sleep_total <- filter(msleep, order=="Primates") %>% select("sleep_total")
+class(sleep_total)
+```
+
+

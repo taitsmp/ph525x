@@ -1,0 +1,13 @@
+---
+title: "SVD Excercises"
+output: html_notebook
+---
+
+* http://genomicsclass.github.io/book/pages/introduction.html
+* http://genomicsclass.github.io/book/pages/svd_exercises.html
+
+```{r load}
+library(tissuesGeneExpression)
+data(tissuesGeneExpression)
+```
+
