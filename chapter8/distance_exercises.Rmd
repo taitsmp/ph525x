@@ -14,3 +14,32 @@ data(tissuesGeneExpression)
 head(e)
 head(tissue)
 ```
+
+The data represents RNA expression levels for eight tissues, each with several **biological replictes**. We call samples that we consider to be from the same population, such as liver tissue from different individuals, biological replicates:
+
+1. How many biological replicates for hippocampus?
+
+```{r}
+table(tissue)
+```
+
+*Interesting definition of **biological replicates**.  As always replicates are relevant to the domain you are considering. Could be an organ, person, enthnic group or population of a country.*
+
+2. What is the distance between samples 3 and 45?
+
+```{r}
+e1 <- e[,3]
+e2 <- e[,45]
+
+dq2 <- sqrt(sum(e1-e2)^2)
+```
+
+3. What is the distance between gene 210486_at and 200805_at?
+
+```{r}
+
+```
+
+
+*Interesting to consider checking the distance between two genes. Gene similarity by clustering.*
+
