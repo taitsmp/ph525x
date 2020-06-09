@@ -1749,6 +1749,10 @@ summary {
 
 
 <!-- rnb-text-begin -->
+<ul>
+<li><a href="http://genomicsclass.github.io/book/pages/distance.html" class="uri">http://genomicsclass.github.io/book/pages/distance.html</a></li>
+<li><a href="http://genomicsclass.github.io/book/pages/distance_exercises.html" class="uri">http://genomicsclass.github.io/book/pages/distance_exercises.html</a></li>
+</ul>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkZXZ0b29scylcbmBgYCJ9 -->
@@ -1856,12 +1860,46 @@ dq2 &lt;- sqrt(sum(e1-e2)^2)</code></pre>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZzEgPC0gZVtcIjIxMDQ4Nl9hdFwiLF1cbmcyIDwtIGVbXCIyMDA4MDVfYXRcIixdXG5kcTNhIDwtIHNxcnQoY3Jvc3Nwcm9kKGcxLWcyKSlcblxuZzEyIDwtIGVbYyhcIjIxMDQ4Nl9hdFwiLCBcIjIwMDgwNV9hdFwiKSxdXG5kMTIgPC0gZGlzdChnMTIpXG4jZHEzYiA8LVxuYGBgIn0= -->
+<pre class="r"><code>g1 &lt;- e[&quot;210486_at&quot;,]
+g2 &lt;- e[&quot;200805_at&quot;,]
+dq3a &lt;- sqrt(crossprod(g1-g2))
+
+g12 &lt;- e[c(&quot;210486_at&quot;, &quot;200805_at&quot;),]
+d12 &lt;- dist(g12)
+#dq3b &lt;-</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><em>Interesting to consider checking the distance between two genes. Gene similarity by clustering.</em></p>
+<ol start="4" style="list-style-type: decimal">
+<li>If I run the command (don’t run it!):</li>
+</ol>
+<p><code>d = as.matrix( dist(e) )</code></p>
+<p>How many cells will this matrix have?</p>
+<p>You’re calculating the euclidean difference between each gene so</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGltKGUpWzFdXG5gYGAifQ== -->
+<pre class="r"><code>dim(e)[1]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>22215 x 22215</p>
+<ol start="5" style="list-style-type: decimal">
+<li>Compute the distance between all pair of samples:</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIGQgPSBkaXN0KCB0KGUpIClcbmBgYCJ9 -->
+<pre class="r"><code> d = dist( t(e) )</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>LEFT OFF HERE. didn’t run this.</p>
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRGlzdGFuY2UgRXhlcmNpc2VzIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpgYGB7ciBpbnN0YWxsfQpsaWJyYXJ5KGRldnRvb2xzKQppbnN0YWxsX2dpdGh1YigiZ2Vub21pY3NjbGFzcy90aXNzdWVzR2VuZUV4cHJlc3Npb24iKQpgYGAKCmBgYHtyIGxvYWR9CmxpYnJhcnkodGlzc3Vlc0dlbmVFeHByZXNzaW9uKQpkYXRhKHRpc3N1ZXNHZW5lRXhwcmVzc2lvbikKaGVhZChlKQpoZWFkKHRpc3N1ZSkKYGBgCgpUaGUgZGF0YSByZXByZXNlbnRzIFJOQSBleHByZXNzaW9uIGxldmVscyBmb3IgZWlnaHQgdGlzc3VlcywgZWFjaCB3aXRoIHNldmVyYWwgKipiaW9sb2dpY2FsIHJlcGxpY3RlcyoqLiBXZSBjYWxsIHNhbXBsZXMgdGhhdCB3ZSBjb25zaWRlciB0byBiZSBmcm9tIHRoZSBzYW1lIHBvcHVsYXRpb24sIHN1Y2ggYXMgbGl2ZXIgdGlzc3VlIGZyb20gZGlmZmVyZW50IGluZGl2aWR1YWxzLCBiaW9sb2dpY2FsIHJlcGxpY2F0ZXM6CgoxLiBIb3cgbWFueSBiaW9sb2dpY2FsIHJlcGxpY2F0ZXMgZm9yIGhpcHBvY2FtcHVzPwoKYGBge3J9CnRhYmxlKHRpc3N1ZSkKYGBgCgoqSW50ZXJlc3RpbmcgZGVmaW5pdGlvbiBvZiAqKmJpb2xvZ2ljYWwgcmVwbGljYXRlcyoqLiAgQXMgYWx3YXlzIHJlcGxpY2F0ZXMgYXJlIHJlbGV2YW50IHRvIHRoZSBkb21haW4geW91IGFyZSBjb25zaWRlcmluZy4gQ291bGQgYmUgYW4gb3JnYW4sIHBlcnNvbiwgZW50aG5pYyBncm91cCBvciBwb3B1bGF0aW9uIG9mIGEgY291bnRyeS4qCgoyLiBXaGF0IGlzIHRoZSBkaXN0YW5jZSBiZXR3ZWVuIHNhbXBsZXMgMyBhbmQgNDU/CgpgYGB7cn0KZTEgPC0gZVssM10KZTIgPC0gZVssNDVdCgpkcTIgPC0gc3FydChzdW0oZTEtZTIpXjIpCmBgYAoKMy4gV2hhdCBpcyB0aGUgZGlzdGFuY2UgYmV0d2VlbiBnZW5lIDIxMDQ4Nl9hdCBhbmQgMjAwODA1X2F0PwoKYGBge3J9CgpgYGAKCgoqSW50ZXJlc3RpbmcgdG8gY29uc2lkZXIgY2hlY2tpbmcgdGhlIGRpc3RhbmNlIGJldHdlZW4gdHdvIGdlbmVzLiBHZW5lIHNpbWlsYXJpdHkgYnkgY2x1c3RlcmluZy4qCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRGlzdGFuY2UgRXhlcmNpc2VzIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgoqIGh0dHA6Ly9nZW5vbWljc2NsYXNzLmdpdGh1Yi5pby9ib29rL3BhZ2VzL2Rpc3RhbmNlLmh0bWwKKiBodHRwOi8vZ2Vub21pY3NjbGFzcy5naXRodWIuaW8vYm9vay9wYWdlcy9kaXN0YW5jZV9leGVyY2lzZXMuaHRtbAoKYGBge3IgaW5zdGFsbH0KbGlicmFyeShkZXZ0b29scykKaW5zdGFsbF9naXRodWIoImdlbm9taWNzY2xhc3MvdGlzc3Vlc0dlbmVFeHByZXNzaW9uIikKYGBgCgpgYGB7ciBsb2FkfQpsaWJyYXJ5KHRpc3N1ZXNHZW5lRXhwcmVzc2lvbikKZGF0YSh0aXNzdWVzR2VuZUV4cHJlc3Npb24pCmhlYWQoZSkKaGVhZCh0aXNzdWUpCmBgYAoKVGhlIGRhdGEgcmVwcmVzZW50cyBSTkEgZXhwcmVzc2lvbiBsZXZlbHMgZm9yIGVpZ2h0IHRpc3N1ZXMsIGVhY2ggd2l0aCBzZXZlcmFsICoqYmlvbG9naWNhbCByZXBsaWN0ZXMqKi4gV2UgY2FsbCBzYW1wbGVzIHRoYXQgd2UgY29uc2lkZXIgdG8gYmUgZnJvbSB0aGUgc2FtZSBwb3B1bGF0aW9uLCBzdWNoIGFzIGxpdmVyIHRpc3N1ZSBmcm9tIGRpZmZlcmVudCBpbmRpdmlkdWFscywgYmlvbG9naWNhbCByZXBsaWNhdGVzOgoKMS4gSG93IG1hbnkgYmlvbG9naWNhbCByZXBsaWNhdGVzIGZvciBoaXBwb2NhbXB1cz8KCmBgYHtyfQp0YWJsZSh0aXNzdWUpCmBgYAoKKkludGVyZXN0aW5nIGRlZmluaXRpb24gb2YgKipiaW9sb2dpY2FsIHJlcGxpY2F0ZXMqKi4gIEFzIGFsd2F5cyByZXBsaWNhdGVzIGFyZSByZWxldmFudCB0byB0aGUgZG9tYWluIHlvdSBhcmUgY29uc2lkZXJpbmcuIENvdWxkIGJlIGFuIG9yZ2FuLCBwZXJzb24sIGVudGhuaWMgZ3JvdXAgb3IgcG9wdWxhdGlvbiBvZiBhIGNvdW50cnkuKgoKMi4gV2hhdCBpcyB0aGUgZGlzdGFuY2UgYmV0d2VlbiBzYW1wbGVzIDMgYW5kIDQ1PwoKYGBge3J9CmUxIDwtIGVbLDNdCmUyIDwtIGVbLDQ1XQoKZHEyIDwtIHNxcnQoc3VtKGUxLWUyKV4yKSAjdGhlcmUgYXJlIGJldHRlciB3YXlzIHRvIGRvIHRoaXMuIFNlZSBhbnN3ZXIgdG8gcXVlc3Rpb24gMy4gCmBgYAoKMy4gV2hhdCBpcyB0aGUgZGlzdGFuY2UgYmV0d2VlbiBnZW5lIDIxMDQ4Nl9hdCBhbmQgMjAwODA1X2F0PwoKYGBge3J9CmcxIDwtIGVbIjIxMDQ4Nl9hdCIsXQpnMiA8LSBlWyIyMDA4MDVfYXQiLF0KZHEzYSA8LSBzcXJ0KGNyb3NzcHJvZChnMS1nMikpCgpnMTIgPC0gZVtjKCIyMTA0ODZfYXQiLCAiMjAwODA1X2F0IiksXQpkMTIgPC0gZGlzdChnMTIpCmRxM2IgPC0gYXMubWF0cml4KGQxMilbMSwyXSAjYWx0ZXJuYXRpdmUgd2F5IHRvIGdldCB0aGUgc2FtZSBhbnN3ZXIuIApgYGAKCgoqSW50ZXJlc3RpbmcgdG8gY29uc2lkZXIgY2hlY2tpbmcgdGhlIGRpc3RhbmNlIGJldHdlZW4gdHdvIGdlbmVzLiBHZW5lIHNpbWlsYXJpdHkgYnkgY2x1c3RlcmluZy4qCgo0LiBJZiBJIHJ1biB0aGUgY29tbWFuZCAoZG9u4oCZdCBydW4gaXQhKToKCmBkID0gYXMubWF0cml4KCBkaXN0KGUpIClgCgpIb3cgbWFueSBjZWxscyB3aWxsIHRoaXMgbWF0cml4IGhhdmU/CgpZb3UncmUgY2FsY3VsYXRpbmcgdGhlIGV1Y2xpZGVhbiBkaWZmZXJlbmNlIGJldHdlZW4gZWFjaCBnZW5lIHNvIAoKYGBge3J9CmRpbShlKVsxXQpgYGAKCjIyMjE1IHggMjIyMTUKCjUuIENvbXB1dGUgdGhlIGRpc3RhbmNlIGJldHdlZW4gYWxsIHBhaXIgb2Ygc2FtcGxlczoKCmBgYHtyfQogZCA9IGRpc3QoIHQoZSkgKQpgYGAKCkxFRlQgT0ZGIEhFUkUuIGRpZG4ndCBydW4gdGhpcy4gCg==</div>
 
 
 

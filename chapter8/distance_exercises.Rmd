@@ -3,6 +3,9 @@ title: "Distance Exercises"
 output: html_notebook
 ---
 
+* http://genomicsclass.github.io/book/pages/distance.html
+* http://genomicsclass.github.io/book/pages/distance_exercises.html
+
 ```{r install}
 library(devtools)
 install_github("genomicsclass/tissuesGeneExpression")
@@ -31,15 +34,42 @@ table(tissue)
 e1 <- e[,3]
 e2 <- e[,45]
 
-dq2 <- sqrt(sum(e1-e2)^2)
+dq2 <- sqrt(sum(e1-e2)^2) #there are better ways to do this. See answer to question 3. 
 ```
 
 3. What is the distance between gene 210486_at and 200805_at?
 
 ```{r}
+g1 <- e["210486_at",]
+g2 <- e["200805_at",]
+dq3a <- sqrt(crossprod(g1-g2))
 
+g12 <- e[c("210486_at", "200805_at"),]
+d12 <- dist(g12)
+dq3b <- as.matrix(d12)[1,2] #alternative way to get the same answer. 
 ```
 
 
 *Interesting to consider checking the distance between two genes. Gene similarity by clustering.*
 
+4. If I run the command (don’t run it!):
+
+`d = as.matrix( dist(e) )`
+
+How many cells will this matrix have?
+
+You're calculating the euclidean difference between each gene so 
+
+```{r}
+dim(e)[1]
+```
+
+22215 x 22215
+
+5. Compute the distance between all pair of samples:
+
+```{r}
+ d = dist( t(e) )
+```
+
+LEFT OFF HERE. didn't run this. 
