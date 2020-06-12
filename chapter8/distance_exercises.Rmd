@@ -70,6 +70,10 @@ dim(e)[1]
 
 ```{r}
  d = dist( t(e) )
+length(d)
 ```
+17766
 
-LEFT OFF HERE. didn't run this. 
+6. Why is the answer to exercise 5 not `ncol(e)^2`?
+
+Because we take advantage of symmetry: only lower triangular matrix is stored thus only `ncol(e)*(ncol(e)-1)/2` values.
