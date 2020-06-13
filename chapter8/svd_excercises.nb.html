@@ -1750,7 +1750,7 @@ summary {
 
 <!-- rnb-text-begin -->
 <ul>
-<li><a href="http://genomicsclass.github.io/book/pages/introduction.html" class="uri">http://genomicsclass.github.io/book/pages/introduction.html</a></li>
+<li><a href="http://genomicsclass.github.io/book/pages/svd.html" class="uri">http://genomicsclass.github.io/book/pages/svd.html</a></li>
 <li><a href="http://genomicsclass.github.io/book/pages/svd_exercises.html" class="uri">http://genomicsclass.github.io/book/pages/svd_exercises.html</a></li>
 </ul>
 <!-- rnb-text-end -->
@@ -1761,9 +1761,113 @@ data(tissuesGeneExpression)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<ol style="list-style-type: decimal">
+<li>Computer the svd of e</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucyA9IHN2ZChlKVxuYGBgIn0= -->
+<pre class="r"><code>s = svd(e)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>compute the row means of e</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm0gPSByb3dNZWFucyhlKVxuYGBgIn0= -->
+<pre class="r"><code>rm = rowMeans(e)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>what’s the correlation of the first column of <code>U</code> and <code>rm</code>?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29yKHMkdVssMV0sIHJtKVxuYGBgIn0= -->
+<pre class="r"><code>cor(s$u[,1], rm)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIC0wLjk5OTk5OThcbiJ9 -->
+<pre><code>[1] -0.9999998</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>If we change these means, the distances between columns do not change. For example, changing the means does not change the distances:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmV3bWVhbnMgPSBybm9ybShucm93KGUpKSAjZ2VuIHNvbWUgbmV3IHZhbHVlc1xubmV3ZSA9IG5ld21lYW5zICsgZVxuc3FydChjcm9zc3Byb2QoZVssM10tZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIGVcbmBgYCJ9 -->
+<pre class="r"><code>newmeans = rnorm(nrow(e)) #gen some new values
+newe = newmeans + e
+sqrt(crossprod(e[,3]-e[,45])) #distance calc for e</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgWywxXVxuWzEsXSAxNTIuNTY2MlxuIn0= -->
+<pre><code>         [,1]
+[1,] 152.5662</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3FydChjcm9zc3Byb2QobmV3ZVssM10tbmV3ZVssNDVdKSlcbmBgYCJ9 -->
+<pre class="r"><code>sqrt(crossprod(newe[,3]-newe[,45]))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgWywxXVxuWzEsXSAxNTIuNTY2MlxuIn0= -->
+<pre><code>         [,1]
+[1,] 152.5662</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Also note that this works b/c the difference doesn’t change.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGlmZl9lID0gZVssM10tZVssNDVdXG5kaWZmX25lID0gbmV3ZVssM10tbmV3ZVssNDVdXG5kaWZmX2VbMDoyMF0gLSBkaWZmX25lWzA6MjBdXG5gYGAifQ== -->
+<pre class="r"><code>diff_e = e[,3]-e[,45]
+diff_ne = newe[,3]-newe[,45]
+diff_e[0:20] - diff_ne[0:20]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgIDEwMDdfc19hdCAgICAgICAxMDUzX2F0ICAgICAgICAxMTdfYXQgICAgICAgIDEyMV9hdCAgICAgMTI1NV9nX2F0ICAgICAgIDEyOTRfYXQgICAgICAgMTMxNl9hdCBcbiAwLjAwMDAwMGUrMDAgIDAuMDAwMDAwZSswMCAtOC44ODE3ODRlLTE2ICAwLjAwMDAwMGUrMDAgIDAuMDAwMDAwZSswMCAgMC4wMDAwMDBlKzAwICAwLjAwMDAwMGUrMDAgXG4gICAgICAxMzIwX2F0ICAgICAxNDA1X2lfYXQgICAgICAgMTQzMV9hdCAgICAgICAxNDM4X2F0ICAgICAgIDE0ODdfYXQgICAgIDE0OTRfZl9hdCAgICAgMTU5OF9nX2F0IFxuIDAuMDAwMDAwZSswMCAgMC4wMDAwMDBlKzAwICAwLjAwMDAwMGUrMDAgIDguODgxNzg0ZS0xNiAgMC4wMDAwMDBlKzAwICAwLjAwMDAwMGUrMDAgIDAuMDAwMDAwZSswMCBcbiAgICAxNjAwMjBfYXQgICAgICAgMTcyOV9hdCAgICAgICAxNzczX2F0ICAgICAgICAxNzdfYXQgICAgICAgIDE3OV9hdCAgICAgICAxODYxX2F0IFxuIDAuMDAwMDAwZSswMCAgMC4wMDAwMDBlKzAwICAwLjAwMDAwMGUrMDAgIDAuMDAwMDAwZSswMCAgMC4wMDAwMDBlKzAwICAwLjAwMDAwMGUrMDAgXG4ifQ== -->
+<pre><code>    1007_s_at       1053_at        117_at        121_at     1255_g_at       1294_at       1316_at 
+ 0.000000e+00  0.000000e+00 -8.881784e-16  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00 
+      1320_at     1405_i_at       1431_at       1438_at       1487_at     1494_f_at     1598_g_at 
+ 0.000000e+00  0.000000e+00  0.000000e+00  8.881784e-16  0.000000e+00  0.000000e+00  0.000000e+00 
+    160020_at       1729_at       1773_at        177_at        179_at       1861_at 
+ 0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>So we might as well make the mean of each row 0, since it does not help us approximate the column distances. We will define y as the <em>detrended</em> e and recompute the SVD:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueSA9IGUgLSByb3dNZWFucyhlKVxucyA9IHN2ZCh5KVxuYGBgIn0= -->
+<pre class="r"><code>y = e - rowMeans(e)
+s = svd(y)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>We showed that <code>UDV⊤</code> is equal to y up to numerical error:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVzaWQgPSB5IC0gcyR1ICUqJSBkaWFnKHMkZCkgJSolIHQocyR2KVxuYGBgIn0= -->
+<pre class="r"><code>resid = y - s$u %*% diag(s$d) %*% t(s$v)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The above can be made more efficient in two ways. First, using the crossprod and, second, not creating a diagonal matrix. In R, we can multiply matrices x by vector a. The result is a matrix with rows i equal to x[i,]*a[i].</p>
+<p>This means that we don’t have to convert s$d into a matrix.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Which of the following gives us the same as <code>diag(s$d)%*%t(s$v)</code> ?</li>
+</ol>
+<ol style="list-style-type: upper-alpha">
+<li><code>s$d %*% t(s$v)</code></li>
+<li><code>s$d * t(s$v)</code></li>
+<li><code>t(s$d * s$v)</code></li>
+<li><code>s$v * s$d</code></li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3JpZyA9IGRpYWcocyRkKSUqJXQocyR2KVxuYW5zQiA9ICBzJGQgKiB0KHMkdilcbmBgYCJ9 -->
+<pre class="r"><code>orig = diag(s$d)%*%t(s$v)
+ansB =  s$d * t(s$v)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiU1ZEIEV4Y2VyY2lzZXMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiogaHR0cDovL2dlbm9taWNzY2xhc3MuZ2l0aHViLmlvL2Jvb2svcGFnZXMvaW50cm9kdWN0aW9uLmh0bWwKKiBodHRwOi8vZ2Vub21pY3NjbGFzcy5naXRodWIuaW8vYm9vay9wYWdlcy9zdmRfZXhlcmNpc2VzLmh0bWwKCmBgYHtyIGxvYWR9CmxpYnJhcnkodGlzc3Vlc0dlbmVFeHByZXNzaW9uKQpkYXRhKHRpc3N1ZXNHZW5lRXhwcmVzc2lvbikKYGBgCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiU1ZEIEV4Y2VyY2lzZXMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiogaHR0cDovL2dlbm9taWNzY2xhc3MuZ2l0aHViLmlvL2Jvb2svcGFnZXMvc3ZkLmh0bWwKKiBodHRwOi8vZ2Vub21pY3NjbGFzcy5naXRodWIuaW8vYm9vay9wYWdlcy9zdmRfZXhlcmNpc2VzLmh0bWwKCmBgYHtyIGxvYWR9CmxpYnJhcnkodGlzc3Vlc0dlbmVFeHByZXNzaW9uKQpkYXRhKHRpc3N1ZXNHZW5lRXhwcmVzc2lvbikKYGBgCgoxLiBDb21wdXRlciB0aGUgc3ZkIG9mIGUKCmBgYHtyfQpzID0gc3ZkKGUpCmBgYAoKY29tcHV0ZSB0aGUgcm93IG1lYW5zIG9mIGUKCmBgYHtyfQpybSA9IHJvd01lYW5zKGUpCmBgYAoKd2hhdCdzIHRoZSBjb3JyZWxhdGlvbiBvZiB0aGUgZmlyc3QgY29sdW1uIG9mIGBVYCBhbmQgYHJtYD8gCgpgYGB7cn0KY29yKHMkdVssMV0sIHJtKQpgYGAKCklmIHdlIGNoYW5nZSB0aGVzZSBtZWFucywgdGhlIGRpc3RhbmNlcyBiZXR3ZWVuIGNvbHVtbnMgZG8gbm90IGNoYW5nZS4gRm9yIGV4YW1wbGUsIGNoYW5naW5nIHRoZSBtZWFucyBkb2VzIG5vdCBjaGFuZ2UgdGhlIGRpc3RhbmNlczoKCmBgYHtyfQpuZXdtZWFucyA9IHJub3JtKG5yb3coZSkpICNnZW4gc29tZSBuZXcgdmFsdWVzCm5ld2UgPSBuZXdtZWFucyArIGUKc3FydChjcm9zc3Byb2QoZVssM10tZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIHR3byBjb2x1bW5zIGluIGUKc3FydChjcm9zc3Byb2QobmV3ZVssM10tbmV3ZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIHR3byBjb2x1bW5zIGluIG5ld2UKYGBgCgpBbHNvIG5vdGUgdGhhdCB0aGlzIHdvcmtzIGIvYyB0aGUgZGlmZmVyZW5jZSBkb2Vzbid0IGNoYW5nZS4gCgpgYGB7cn0KZGlmZl9lID0gZVssM10tZVssNDVdCmRpZmZfbmUgPSBuZXdlWywzXS1uZXdlWyw0NV0KZGlmZl9lWzA6MjBdIC0gZGlmZl9uZVswOjIwXSAgIwpgYGAKClNvIHdlIG1pZ2h0IGFzIHdlbGwgbWFrZSB0aGUgbWVhbiBvZiBlYWNoIHJvdyAwLCBzaW5jZSBpdCBkb2VzIG5vdCBoZWxwIHVzIGFwcHJveGltYXRlIHRoZSBjb2x1bW4gZGlzdGFuY2VzLiBXZSB3aWxsIGRlZmluZSB5IGFzIHRoZSAqZGV0cmVuZGVkKiBlIGFuZCByZWNvbXB1dGUgdGhlIFNWRDoKCmBgYHtyfQp5ID0gZSAtIHJvd01lYW5zKGUpCnMgPSBzdmQoeSkKYGBgCgpXZSBzaG93ZWQgdGhhdCBgVURW4oqkYCBpcyBlcXVhbCB0byB5IHVwIHRvIG51bWVyaWNhbCBlcnJvcjoKCmBgYHtyfQpyZXNpZCA9IHkgLSBzJHUgJSolIGRpYWcocyRkKSAlKiUgdChzJHYpCmBgYAoKVGhlIGFib3ZlIGNhbiBiZSBtYWRlIG1vcmUgZWZmaWNpZW50IGluIHR3byB3YXlzLiBGaXJzdCwgdXNpbmcgdGhlIGNyb3NzcHJvZCBhbmQsIHNlY29uZCwgbm90IGNyZWF0aW5nIGEgZGlhZ29uYWwgbWF0cml4LiBJbiBSLCB3ZSBjYW4gbXVsdGlwbHkgbWF0cmljZXMgeCBieSB2ZWN0b3IgYS4gVGhlIHJlc3VsdCBpcyBhIG1hdHJpeCB3aXRoIHJvd3MgaSBlcXVhbCB0byB4W2ksXSphW2ldLgoKVGhpcyBtZWFucyB0aGF0IHdlIGRvbuKAmXQgaGF2ZSB0byBjb252ZXJ0IHMkZCBpbnRvIGEgbWF0cml4LgoKMi4gV2hpY2ggb2YgdGhlIGZvbGxvd2luZyBnaXZlcyB1cyB0aGUgc2FtZSBhcyBgZGlhZyhzJGQpJSoldChzJHYpYCA/CgpBKSBgcyRkICUqJSB0KHMkdilgCkIpIGBzJGQgKiB0KHMkdilgCkMpIGB0KHMkZCAqIHMkdilgCkQpIGBzJHYgKiBzJGRgCgoKYGBge3J9Cm9yaWcgPSBkaWFnKHMkZCklKiV0KHMkdikKYW5zQiA9ICBzJGQgKiB0KHMkdikKYGBgCgo=</div>
 
 
 

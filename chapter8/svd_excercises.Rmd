@@ -3,11 +3,76 @@ title: "SVD Excercises"
 output: html_notebook
 ---
 
-* http://genomicsclass.github.io/book/pages/introduction.html
+* http://genomicsclass.github.io/book/pages/svd.html
 * http://genomicsclass.github.io/book/pages/svd_exercises.html
 
 ```{r load}
 library(tissuesGeneExpression)
 data(tissuesGeneExpression)
+```
+
+1. Computer the svd of e
+
+```{r}
+s = svd(e)
+```
+
+compute the row means of e
+
+```{r}
+rm = rowMeans(e)
+```
+
+what's the correlation of the first column of `U` and `rm`? 
+
+```{r}
+cor(s$u[,1], rm)
+```
+
+If we change these means, the distances between columns do not change. For example, changing the means does not change the distances:
+
+```{r}
+newmeans = rnorm(nrow(e)) #gen some new values
+newe = newmeans + e
+sqrt(crossprod(e[,3]-e[,45])) #distance calc for two columns in e
+sqrt(crossprod(newe[,3]-newe[,45])) #distance calc for two columns in newe
+```
+
+Also note that this works b/c the difference doesn't change. 
+
+```{r}
+diff_e = e[,3]-e[,45]
+diff_ne = newe[,3]-newe[,45]
+diff_e[0:20] - diff_ne[0:20]  #
+```
+
+So we might as well make the mean of each row 0, since it does not help us approximate the column distances. We will define y as the *detrended* e and recompute the SVD:
+
+```{r}
+y = e - rowMeans(e)
+s = svd(y)
+```
+
+We showed that `UDV⊤` is equal to y up to numerical error:
+
+```{r}
+resid = y - s$u %*% diag(s$d) %*% t(s$v)
+```
+
+The above can be made more efficient in two ways. First, using the crossprod and, second, not creating a diagonal matrix. In R, we can multiply matrices x by vector a. The result is a matrix with rows i equal to x[i,]*a[i].
+
+This means that we don’t have to convert s$d into a matrix.
+
+2. Which of the following gives us the same as `diag(s$d)%*%t(s$v)` ?
+
+A) `s$d %*% t(s$v)`
+B) `s$d * t(s$v)`
+C) `t(s$d * s$v)`
+D) `s$v * s$d`
+
+
+```{r}
+orig = diag(s$d)%*%t(s$v)
+ansB =  s$d * t(s$v)
 ```
 
