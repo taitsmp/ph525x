@@ -1846,7 +1846,7 @@ s = svd(y)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>The above can be made more efficient in two ways. First, using the crossprod and, second, not creating a diagonal matrix. In R, we can multiply matrices x by vector a. The result is a matrix with rows i equal to x[i,]*a[i].</p>
+<p>The above can be made more efficient in two ways. First, using the crossprod and, second, not creating a diagonal matrix. In R, we can multiply matrices x by vector a. The result is a matrix with rows i equal to <code>x[i,]*a[i]</code>.</p>
 <p>This means that we don’t have to convert s$d into a matrix.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Which of the following gives us the same as <code>diag(s$d)%*%t(s$v)</code> ?</li>
@@ -1865,9 +1865,58 @@ ansB =  s$d * t(s$v)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<ol start="3" style="list-style-type: decimal">
+<li>If we define <code>vd = t(s$d * t(s$v))</code>, then which of the following is not the same UDV⊤ ?</li>
+</ol>
+<ol style="list-style-type: upper-alpha">
+<li><code>tcrossprod(s$u,vd)</code></li>
+<li><code>s$u %*% s$d * t(s$v)</code></li>
+<li><code>s$u %*% (s$d * t(s$v) )</code></li>
+<li><code>tcrossprod( t( s$d*t(s$u)) , s$v)</code></li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmQgPSB0KHMkZCAqIHQocyR2KSlcbmEzID0gdGNyb3NzcHJvZChzJHUsdmQpXG5kaW0oYTMpXG5gYGAifQ== -->
+<pre class="r"><code>vd = t(s$d * t(s$v))
+a3 = tcrossprod(s$u,vd)
+dim(a3)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIyMjE1ICAgMTg5XG4ifQ== -->
+<pre><code>[1] 22215   189</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYjMgPSBzJHUgJSolIHMkZCAqIHQocyR2KVxuYGBgIn0= -->
+<pre class="r"><code>b3 = s$u %*% s$d * t(s$v)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gcyR1ICUqJSBzJGQgKiB0KHMkdikgOiBub24tY29uZm9ybWFibGUgYXJyYXlzXG4ifQ== -->
+<pre><code>Error in s$u %*% s$d * t(s$v) : non-conformable arrays</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYzM9IHMkdSAlKiUgKHMkZCAqIHQocyR2KSApXG5kaW0oYzMpXG5gYGAifQ== -->
+<pre class="r"><code>c3= s$u %*% (s$d * t(s$v) )
+dim(c3)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIyMjE1ICAgMTg5XG4ifQ== -->
+<pre><code>[1] 22215   189</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZDMgPSB0Y3Jvc3Nwcm9kKCB0KCBzJGQqdChzJHUpKSAsIHMkdilcbmRpbShkMylcbmBgYCJ9 -->
+<pre class="r"><code>d3 = tcrossprod( t( s$d*t(s$u)) , s$v)
+dim(d3)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIyMjE1ICAgMTg5XG4ifQ== -->
+<pre><code>[1] 22215   189</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiU1ZEIEV4Y2VyY2lzZXMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiogaHR0cDovL2dlbm9taWNzY2xhc3MuZ2l0aHViLmlvL2Jvb2svcGFnZXMvc3ZkLmh0bWwKKiBodHRwOi8vZ2Vub21pY3NjbGFzcy5naXRodWIuaW8vYm9vay9wYWdlcy9zdmRfZXhlcmNpc2VzLmh0bWwKCmBgYHtyIGxvYWR9CmxpYnJhcnkodGlzc3Vlc0dlbmVFeHByZXNzaW9uKQpkYXRhKHRpc3N1ZXNHZW5lRXhwcmVzc2lvbikKYGBgCgoxLiBDb21wdXRlciB0aGUgc3ZkIG9mIGUKCmBgYHtyfQpzID0gc3ZkKGUpCmBgYAoKY29tcHV0ZSB0aGUgcm93IG1lYW5zIG9mIGUKCmBgYHtyfQpybSA9IHJvd01lYW5zKGUpCmBgYAoKd2hhdCdzIHRoZSBjb3JyZWxhdGlvbiBvZiB0aGUgZmlyc3QgY29sdW1uIG9mIGBVYCBhbmQgYHJtYD8gCgpgYGB7cn0KY29yKHMkdVssMV0sIHJtKQpgYGAKCklmIHdlIGNoYW5nZSB0aGVzZSBtZWFucywgdGhlIGRpc3RhbmNlcyBiZXR3ZWVuIGNvbHVtbnMgZG8gbm90IGNoYW5nZS4gRm9yIGV4YW1wbGUsIGNoYW5naW5nIHRoZSBtZWFucyBkb2VzIG5vdCBjaGFuZ2UgdGhlIGRpc3RhbmNlczoKCmBgYHtyfQpuZXdtZWFucyA9IHJub3JtKG5yb3coZSkpICNnZW4gc29tZSBuZXcgdmFsdWVzCm5ld2UgPSBuZXdtZWFucyArIGUKc3FydChjcm9zc3Byb2QoZVssM10tZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIHR3byBjb2x1bW5zIGluIGUKc3FydChjcm9zc3Byb2QobmV3ZVssM10tbmV3ZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIHR3byBjb2x1bW5zIGluIG5ld2UKYGBgCgpBbHNvIG5vdGUgdGhhdCB0aGlzIHdvcmtzIGIvYyB0aGUgZGlmZmVyZW5jZSBkb2Vzbid0IGNoYW5nZS4gCgpgYGB7cn0KZGlmZl9lID0gZVssM10tZVssNDVdCmRpZmZfbmUgPSBuZXdlWywzXS1uZXdlWyw0NV0KZGlmZl9lWzA6MjBdIC0gZGlmZl9uZVswOjIwXSAgIwpgYGAKClNvIHdlIG1pZ2h0IGFzIHdlbGwgbWFrZSB0aGUgbWVhbiBvZiBlYWNoIHJvdyAwLCBzaW5jZSBpdCBkb2VzIG5vdCBoZWxwIHVzIGFwcHJveGltYXRlIHRoZSBjb2x1bW4gZGlzdGFuY2VzLiBXZSB3aWxsIGRlZmluZSB5IGFzIHRoZSAqZGV0cmVuZGVkKiBlIGFuZCByZWNvbXB1dGUgdGhlIFNWRDoKCmBgYHtyfQp5ID0gZSAtIHJvd01lYW5zKGUpCnMgPSBzdmQoeSkKYGBgCgpXZSBzaG93ZWQgdGhhdCBgVURW4oqkYCBpcyBlcXVhbCB0byB5IHVwIHRvIG51bWVyaWNhbCBlcnJvcjoKCmBgYHtyfQpyZXNpZCA9IHkgLSBzJHUgJSolIGRpYWcocyRkKSAlKiUgdChzJHYpCmBgYAoKVGhlIGFib3ZlIGNhbiBiZSBtYWRlIG1vcmUgZWZmaWNpZW50IGluIHR3byB3YXlzLiBGaXJzdCwgdXNpbmcgdGhlIGNyb3NzcHJvZCBhbmQsIHNlY29uZCwgbm90IGNyZWF0aW5nIGEgZGlhZ29uYWwgbWF0cml4LiBJbiBSLCB3ZSBjYW4gbXVsdGlwbHkgbWF0cmljZXMgeCBieSB2ZWN0b3IgYS4gVGhlIHJlc3VsdCBpcyBhIG1hdHJpeCB3aXRoIHJvd3MgaSBlcXVhbCB0byB4W2ksXSphW2ldLgoKVGhpcyBtZWFucyB0aGF0IHdlIGRvbuKAmXQgaGF2ZSB0byBjb252ZXJ0IHMkZCBpbnRvIGEgbWF0cml4LgoKMi4gV2hpY2ggb2YgdGhlIGZvbGxvd2luZyBnaXZlcyB1cyB0aGUgc2FtZSBhcyBgZGlhZyhzJGQpJSoldChzJHYpYCA/CgpBKSBgcyRkICUqJSB0KHMkdilgCkIpIGBzJGQgKiB0KHMkdilgCkMpIGB0KHMkZCAqIHMkdilgCkQpIGBzJHYgKiBzJGRgCgoKYGBge3J9Cm9yaWcgPSBkaWFnKHMkZCklKiV0KHMkdikKYW5zQiA9ICBzJGQgKiB0KHMkdikKYGBgCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiU1ZEIEV4Y2VyY2lzZXMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiogaHR0cDovL2dlbm9taWNzY2xhc3MuZ2l0aHViLmlvL2Jvb2svcGFnZXMvc3ZkLmh0bWwKKiBodHRwOi8vZ2Vub21pY3NjbGFzcy5naXRodWIuaW8vYm9vay9wYWdlcy9zdmRfZXhlcmNpc2VzLmh0bWwKCmBgYHtyIGxvYWR9CmxpYnJhcnkodGlzc3Vlc0dlbmVFeHByZXNzaW9uKQpkYXRhKHRpc3N1ZXNHZW5lRXhwcmVzc2lvbikKYGBgCgoxLiBDb21wdXRlciB0aGUgc3ZkIG9mIGUKCmBgYHtyfQpzID0gc3ZkKGUpCmBgYAoKY29tcHV0ZSB0aGUgcm93IG1lYW5zIG9mIGUKCmBgYHtyfQpybSA9IHJvd01lYW5zKGUpCmBgYAoKd2hhdCdzIHRoZSBjb3JyZWxhdGlvbiBvZiB0aGUgZmlyc3QgY29sdW1uIG9mIGBVYCBhbmQgYHJtYD8gCgpgYGB7cn0KY29yKHMkdVssMV0sIHJtKQpgYGAKCklmIHdlIGNoYW5nZSB0aGVzZSBtZWFucywgdGhlIGRpc3RhbmNlcyBiZXR3ZWVuIGNvbHVtbnMgZG8gbm90IGNoYW5nZS4gRm9yIGV4YW1wbGUsIGNoYW5naW5nIHRoZSBtZWFucyBkb2VzIG5vdCBjaGFuZ2UgdGhlIGRpc3RhbmNlczoKCmBgYHtyfQpuZXdtZWFucyA9IHJub3JtKG5yb3coZSkpICNnZW4gc29tZSBuZXcgdmFsdWVzCm5ld2UgPSBuZXdtZWFucyArIGUKc3FydChjcm9zc3Byb2QoZVssM10tZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIHR3byBjb2x1bW5zIGluIGUKc3FydChjcm9zc3Byb2QobmV3ZVssM10tbmV3ZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIHR3byBjb2x1bW5zIGluIG5ld2UKYGBgCgpBbHNvIG5vdGUgdGhhdCB0aGlzIHdvcmtzIGIvYyB0aGUgZGlmZmVyZW5jZSBkb2Vzbid0IGNoYW5nZS4gCgpgYGB7cn0KZGlmZl9lID0gZVssM10tZVssNDVdCmRpZmZfbmUgPSBuZXdlWywzXS1uZXdlWyw0NV0KZGlmZl9lWzA6MjBdIC0gZGlmZl9uZVswOjIwXSAgIwpgYGAKClNvIHdlIG1pZ2h0IGFzIHdlbGwgbWFrZSB0aGUgbWVhbiBvZiBlYWNoIHJvdyAwLCBzaW5jZSBpdCBkb2VzIG5vdCBoZWxwIHVzIGFwcHJveGltYXRlIHRoZSBjb2x1bW4gZGlzdGFuY2VzLiBXZSB3aWxsIGRlZmluZSB5IGFzIHRoZSAqZGV0cmVuZGVkKiBlIGFuZCByZWNvbXB1dGUgdGhlIFNWRDoKCmBgYHtyfQp5ID0gZSAtIHJvd01lYW5zKGUpCnMgPSBzdmQoeSkKYGBgCgpXZSBzaG93ZWQgdGhhdCBgVURW4oqkYCBpcyBlcXVhbCB0byB5IHVwIHRvIG51bWVyaWNhbCBlcnJvcjoKCmBgYHtyfQpyZXNpZCA9IHkgLSBzJHUgJSolIGRpYWcocyRkKSAlKiUgdChzJHYpCmBgYAoKVGhlIGFib3ZlIGNhbiBiZSBtYWRlIG1vcmUgZWZmaWNpZW50IGluIHR3byB3YXlzLiBGaXJzdCwgdXNpbmcgdGhlIGNyb3NzcHJvZCBhbmQsIHNlY29uZCwgbm90IGNyZWF0aW5nIGEgZGlhZ29uYWwgbWF0cml4LiBJbiBSLCB3ZSBjYW4gbXVsdGlwbHkgbWF0cmljZXMgeCBieSB2ZWN0b3IgYS4gVGhlIHJlc3VsdCBpcyBhIG1hdHJpeCB3aXRoIHJvd3MgaSBlcXVhbCB0byBgeFtpLF0qYVtpXWAuCgpUaGlzIG1lYW5zIHRoYXQgd2UgZG9u4oCZdCBoYXZlIHRvIGNvbnZlcnQgcyRkIGludG8gYSBtYXRyaXguCgoyLiBXaGljaCBvZiB0aGUgZm9sbG93aW5nIGdpdmVzIHVzIHRoZSBzYW1lIGFzIGBkaWFnKHMkZCklKiV0KHMkdilgID8KCkEpIGBzJGQgJSolIHQocyR2KWAKQikgYHMkZCAqIHQocyR2KWAKQykgYHQocyRkICogcyR2KWAKRCkgYHMkdiAqIHMkZGAKCgpgYGB7cn0Kb3JpZyA9IGRpYWcocyRkKSUqJXQocyR2KQphbnNCID0gIHMkZCAqIHQocyR2KQpgYGAKCjMuIElmIHdlIGRlZmluZSBgdmQgPSB0KHMkZCAqIHQocyR2KSlgLCB0aGVuIHdoaWNoIG9mIHRoZSBmb2xsb3dpbmcgaXMgbm90IHRoZSBzYW1lIFVEVuKKpCA/CgpBKSBgdGNyb3NzcHJvZChzJHUsdmQpYApCKSBgcyR1ICUqJSBzJGQgKiB0KHMkdilgCkMpIGBzJHUgJSolIChzJGQgKiB0KHMkdikgKWAKRCkgYHRjcm9zc3Byb2QoIHQoIHMkZCp0KHMkdSkpICwgcyR2KWAKCmBgYHtyfQp2ZCA9IHQocyRkICogdChzJHYpKQphMyA9IHRjcm9zc3Byb2QocyR1LHZkKSAjdGNyb3NzcHJvZCB0cmFuc3Bvc2VzIHRoZSBzZWNvbmQgYXJndW1lbnQgaW5zdGVhZCBvZiB0aGUgZmlyc3QuIApkaW0oYTMpCmBgYApgYGB7cn0KYjMgPSBzJHUgJSolIHMkZCAqIHQocyR2KQpgYGAKCgpgYGB7cn0KYzM9IHMkdSAlKiUgKHMkZCAqIHQocyR2KSApCmRpbShjMykKCmBgYApgYGB7cn0KZDMgPSB0Y3Jvc3Nwcm9kKCB0KCBzJGQqdChzJHUpKSAsIHMkdikKZGltKGQzKQpgYGAKCg==</div>
 
 
 

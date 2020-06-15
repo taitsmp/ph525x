@@ -59,7 +59,7 @@ We showed that `UDV⊤` is equal to y up to numerical error:
 resid = y - s$u %*% diag(s$d) %*% t(s$v)
 ```
 
-The above can be made more efficient in two ways. First, using the crossprod and, second, not creating a diagonal matrix. In R, we can multiply matrices x by vector a. The result is a matrix with rows i equal to x[i,]*a[i].
+The above can be made more efficient in two ways. First, using the crossprod and, second, not creating a diagonal matrix. In R, we can multiply matrices x by vector a. The result is a matrix with rows i equal to `x[i,]*a[i]`.
 
 This means that we don’t have to convert s$d into a matrix.
 
@@ -74,5 +74,32 @@ D) `s$v * s$d`
 ```{r}
 orig = diag(s$d)%*%t(s$v)
 ansB =  s$d * t(s$v)
+```
+
+3. If we define `vd = t(s$d * t(s$v))`, then which of the following is not the same UDV⊤ ?
+
+A) `tcrossprod(s$u,vd)`
+B) `s$u %*% s$d * t(s$v)`
+C) `s$u %*% (s$d * t(s$v) )`
+D) `tcrossprod( t( s$d*t(s$u)) , s$v)`
+
+```{r}
+vd = t(s$d * t(s$v))
+a3 = tcrossprod(s$u,vd) #tcrossprod transposes the second argument instead of the first. 
+dim(a3)
+```
+```{r}
+b3 = s$u %*% s$d * t(s$v)
+```
+
+
+```{r}
+c3= s$u %*% (s$d * t(s$v) )
+dim(c3)
+
+```
+```{r}
+d3 = tcrossprod( t( s$d*t(s$u)) , s$v)
+dim(d3)
 ```
 
