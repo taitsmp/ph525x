@@ -103,3 +103,56 @@ d3 = tcrossprod( t( s$d*t(s$u)) , s$v)
 dim(d3)
 ```
 
+4. Let `z = s$d * t(s$v)`. We showed derivation demonstrating that because `U` is orthogonal, the distance between `e[,3]` and `e[,45]` is the same as the distance between `y[,3]` and `y[,45]` (`e` after subtracting out the rowMeans) . which is the same as `vd[,3]` and `vd[,45]` (I believe there is a typo here)
+
+
+
+```{r}
+# Which version of `s` are we talking about? Let's assume
+s = svd(e)
+
+vd = t(s$d * t(s$v))
+
+vd_dist = sqrt(crossprod(vd[,3]-vd[,45])) 
+e_dist  = sqrt(crossprod(e[,3]-e[,45]))
+y_dist  = sqrt(crossprod(y[,3]-y[,45]))
+c(vd_dist, e_dist, y_dist) #I didn't get the same answer here....
+
+vd_dist = sqrt(crossprod(vd[3,]-vd[45,])) #once I changed this to row distances numbers matched up. 
+c(vd_dist, e_dist, y_dist)
+```
+```{r}
+z = s$d * t(s$v)
+z_dist_rows = sqrt(crossprod(z[3,]-z[45,]))
+z_dist_rows
+
+z_dist_cols = sqrt(crossprod(z[,3]-z[,45]))
+z_dist_cols
+```
+
+Note that the columns z have 189 entries, compared to 22,215 for e.
+
+```{r}
+dim(z)
+```
+
+
+What is the difference, in absolute value, between the actual distance:
+
+```
+sqrt(crossprod(e[,3]-e[,45]))
+```
+
+and the approximation using only two dimensions of `z`?
+
+```{r}
+z_dist2 = sqrt(crossprod(z[3,1:2]-z[45,1:2]))
+```
+
+TODO: Come up with an answer here
+
+5. How many dimensions do we need to use for the approximation in exercise 4 to be within 10%?
+
+Consider graphing the percent of variance explained by principal components here. Pick the top N that explain 90% of the variance. Does that get you the right answer? 
+
+

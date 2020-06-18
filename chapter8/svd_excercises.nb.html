@@ -1876,9 +1876,9 @@ ansB =  s$d * t(s$v)</code></pre>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmQgPSB0KHMkZCAqIHQocyR2KSlcbmEzID0gdGNyb3NzcHJvZChzJHUsdmQpXG5kaW0oYTMpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmQgPSB0KHMkZCAqIHQocyR2KSlcbmEzID0gdGNyb3NzcHJvZChzJHUsdmQpICN0Y3Jvc3Nwcm9kIHRyYW5zcG9zZXMgdGhlIHNlY29uZCBhcmd1bWVudCBpbnN0ZWFkIG9mIHRoZSBmaXJzdC4gXG5kaW0oYTMpXG5gYGAifQ== -->
 <pre class="r"><code>vd = t(s$d * t(s$v))
-a3 = tcrossprod(s$u,vd)
+a3 = tcrossprod(s$u,vd) #tcrossprod transposes the second argument instead of the first. 
 dim(a3)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIyMjE1ICAgMTg5XG4ifQ== -->
@@ -1914,9 +1914,91 @@ dim(d3)</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<ol start="4" style="list-style-type: decimal">
+<li>Let <code>z = s$d * t(s$v)</code>. We showed derivation demonstrating that because <code>U</code> is orthogonal, the distance between <code>e[,3]</code> and <code>e[,45]</code> is the same as the distance between <code>y[,3]</code> and <code>y[,45]</code> (<code>e</code> after subtracting out the rowMeans) . which is the same as <code>vd[,3]</code> and <code>vd[,45]</code> (I believe there is a typo here)</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBXaGljaCB2ZXJzaW9uIG9mIGBzYCBhcmUgd2UgdGFsa2luZyBhYm91dD8gTGV0J3MgYXNzdW1lXG5zID0gc3ZkKGUpXG5cbiN5b3Ugd2lsbCBnZXQgYSBkaWZmZXJlbnQgYW5zd2VyIGZvciB0aGUgZGlzdGFuY2Ugb2YgXG4jcyA9IHN2ZCh5KVxuIyBib3RoIG51bWJlcnMgd2lsbCBiZSBiaWdnZXIgdGhhblxuXG52ZCA9IHQocyRkICogdChzJHYpKVxuXG52ZF9kaXN0ID0gc3FydChjcm9zc3Byb2QodmRbLDNdLXZkWyw0NV0pKSBcbmVfZGlzdCAgPSBzcXJ0KGNyb3NzcHJvZChlWywzXS1lWyw0NV0pKVxueV9kaXN0ICA9IHNxcnQoY3Jvc3Nwcm9kKHlbLDNdLXlbLDQ1XSkpXG5jKHZkX2Rpc3QsIGVfZGlzdCwgeV9kaXN0KSAjSSBkaWRuJ3QgZ2V0IHRoZSBzYW1lIGFuc3dlciBoZXJlLi4uLlxuYGBgIn0= -->
+<pre class="r"><code># Which version of `s` are we talking about? Let's assume
+s = svd(e)
+
+#you will get a different answer for the distance of 
+#s = svd(y)
+# both numbers will be bigger than
+
+vd = t(s$d * t(s$v))
+
+vd_dist = sqrt(crossprod(vd[,3]-vd[,45])) 
+e_dist  = sqrt(crossprod(e[,3]-e[,45]))
+y_dist  = sqrt(crossprod(y[,3]-y[,45]))
+c(vd_dist, e_dist, y_dist) #I didn't get the same answer here....</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDUzNS41OTY1IDE1Mi41NjYyIDE1Mi41NjYyXG4ifQ== -->
+<pre><code>[1] 535.5965 152.5662 152.5662</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmRfZGlzdCA9IHNxcnQoY3Jvc3Nwcm9kKHZkWzMsXS12ZFs0NSxdKSkgI29uY2UgSSBjaGFuZ2VkIHRoaXMgdG8gcm93IGRpc3RhbmNlcyBudW1iZXJzIG1hdGNoZWQgdXAuIFxuYyh2ZF9kaXN0LCBlX2Rpc3QsIHlfZGlzdClcbmBgYCJ9 -->
+<pre class="r"><code>vd_dist = sqrt(crossprod(vd[3,]-vd[45,])) #once I changed this to row distances numbers matched up. 
+c(vd_dist, e_dist, y_dist)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE1Mi41NjYyIDE1Mi41NjYyIDE1Mi41NjYyXG4ifQ== -->
+<pre><code>[1] 152.5662 152.5662 152.5662</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueiA9IHMkZCAqIHQocyR2KVxuel9kaXN0X3Jvd3MgPSBzcXJ0KGNyb3NzcHJvZCh6WzMsXS16WzQ1LF0pKVxuel9kaXN0X3Jvd3NcbmBgYCJ9 -->
+<pre class="r"><code>z = s$d * t(s$v)
+z_dist_rows = sqrt(crossprod(z[3,]-z[45,]))
+z_dist_rows</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgWywxXVxuWzEsXSA1MzUuNTk2NVxuIn0= -->
+<pre><code>         [,1]
+[1,] 535.5965</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuel9kaXN0X2NvbHMgPSBzcXJ0KGNyb3NzcHJvZCh6WywzXS16Wyw0NV0pKVxuel9kaXN0X2NvbHNcbmBgYCJ9 -->
+<pre class="r"><code>z_dist_cols = sqrt(crossprod(z[,3]-z[,45]))
+z_dist_cols</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgWywxXVxuWzEsXSAxNTIuNTY2MlxuIn0= -->
+<pre><code>         [,1]
+[1,] 152.5662</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Note that the columns z have 189 entries, compared to 22,215 for e.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGltKHopXG5gYGAifQ== -->
+<pre class="r"><code>dim(z)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE4OSAxODlcbiJ9 -->
+<pre><code>[1] 189 189</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>What is the difference, in absolute value, between the actual distance:</p>
+<pre><code>sqrt(crossprod(e[,3]-e[,45]))</code></pre>
+<p>and the approximation using only two dimensions of <code>z</code>?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuel9kaXN0MiA9IHNxcnQoY3Jvc3Nwcm9kKHpbMywxOjJdLXpbNDUsMToyXSkpXG56X2Rpc3QyXG5gYGAifQ== -->
+<pre class="r"><code>z_dist2 = sqrt(crossprod(z[3,1:2]-z[45,1:2]))
+z_dist2</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgWywxXVxuWzEsXSA2MS4zNzUxNFxuIn0= -->
+<pre><code>         [,1]
+[1,] 61.37514</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>TODO: Come up with an answer here</p>
+<ol start="5" style="list-style-type: decimal">
+<li>How many dimensions do we need to use for the approximation in exercise 4 to be within 10%?</li>
+</ol>
+<p>Consider graphing the percent of variance explained by principal components here. Pick the top N that explain 90% of the variance. Does that get you the right answer?</p>
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiU1ZEIEV4Y2VyY2lzZXMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiogaHR0cDovL2dlbm9taWNzY2xhc3MuZ2l0aHViLmlvL2Jvb2svcGFnZXMvc3ZkLmh0bWwKKiBodHRwOi8vZ2Vub21pY3NjbGFzcy5naXRodWIuaW8vYm9vay9wYWdlcy9zdmRfZXhlcmNpc2VzLmh0bWwKCmBgYHtyIGxvYWR9CmxpYnJhcnkodGlzc3Vlc0dlbmVFeHByZXNzaW9uKQpkYXRhKHRpc3N1ZXNHZW5lRXhwcmVzc2lvbikKYGBgCgoxLiBDb21wdXRlciB0aGUgc3ZkIG9mIGUKCmBgYHtyfQpzID0gc3ZkKGUpCmBgYAoKY29tcHV0ZSB0aGUgcm93IG1lYW5zIG9mIGUKCmBgYHtyfQpybSA9IHJvd01lYW5zKGUpCmBgYAoKd2hhdCdzIHRoZSBjb3JyZWxhdGlvbiBvZiB0aGUgZmlyc3QgY29sdW1uIG9mIGBVYCBhbmQgYHJtYD8gCgpgYGB7cn0KY29yKHMkdVssMV0sIHJtKQpgYGAKCklmIHdlIGNoYW5nZSB0aGVzZSBtZWFucywgdGhlIGRpc3RhbmNlcyBiZXR3ZWVuIGNvbHVtbnMgZG8gbm90IGNoYW5nZS4gRm9yIGV4YW1wbGUsIGNoYW5naW5nIHRoZSBtZWFucyBkb2VzIG5vdCBjaGFuZ2UgdGhlIGRpc3RhbmNlczoKCmBgYHtyfQpuZXdtZWFucyA9IHJub3JtKG5yb3coZSkpICNnZW4gc29tZSBuZXcgdmFsdWVzCm5ld2UgPSBuZXdtZWFucyArIGUKc3FydChjcm9zc3Byb2QoZVssM10tZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIHR3byBjb2x1bW5zIGluIGUKc3FydChjcm9zc3Byb2QobmV3ZVssM10tbmV3ZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIHR3byBjb2x1bW5zIGluIG5ld2UKYGBgCgpBbHNvIG5vdGUgdGhhdCB0aGlzIHdvcmtzIGIvYyB0aGUgZGlmZmVyZW5jZSBkb2Vzbid0IGNoYW5nZS4gCgpgYGB7cn0KZGlmZl9lID0gZVssM10tZVssNDVdCmRpZmZfbmUgPSBuZXdlWywzXS1uZXdlWyw0NV0KZGlmZl9lWzA6MjBdIC0gZGlmZl9uZVswOjIwXSAgIwpgYGAKClNvIHdlIG1pZ2h0IGFzIHdlbGwgbWFrZSB0aGUgbWVhbiBvZiBlYWNoIHJvdyAwLCBzaW5jZSBpdCBkb2VzIG5vdCBoZWxwIHVzIGFwcHJveGltYXRlIHRoZSBjb2x1bW4gZGlzdGFuY2VzLiBXZSB3aWxsIGRlZmluZSB5IGFzIHRoZSAqZGV0cmVuZGVkKiBlIGFuZCByZWNvbXB1dGUgdGhlIFNWRDoKCmBgYHtyfQp5ID0gZSAtIHJvd01lYW5zKGUpCnMgPSBzdmQoeSkKYGBgCgpXZSBzaG93ZWQgdGhhdCBgVURW4oqkYCBpcyBlcXVhbCB0byB5IHVwIHRvIG51bWVyaWNhbCBlcnJvcjoKCmBgYHtyfQpyZXNpZCA9IHkgLSBzJHUgJSolIGRpYWcocyRkKSAlKiUgdChzJHYpCmBgYAoKVGhlIGFib3ZlIGNhbiBiZSBtYWRlIG1vcmUgZWZmaWNpZW50IGluIHR3byB3YXlzLiBGaXJzdCwgdXNpbmcgdGhlIGNyb3NzcHJvZCBhbmQsIHNlY29uZCwgbm90IGNyZWF0aW5nIGEgZGlhZ29uYWwgbWF0cml4LiBJbiBSLCB3ZSBjYW4gbXVsdGlwbHkgbWF0cmljZXMgeCBieSB2ZWN0b3IgYS4gVGhlIHJlc3VsdCBpcyBhIG1hdHJpeCB3aXRoIHJvd3MgaSBlcXVhbCB0byBgeFtpLF0qYVtpXWAuCgpUaGlzIG1lYW5zIHRoYXQgd2UgZG9u4oCZdCBoYXZlIHRvIGNvbnZlcnQgcyRkIGludG8gYSBtYXRyaXguCgoyLiBXaGljaCBvZiB0aGUgZm9sbG93aW5nIGdpdmVzIHVzIHRoZSBzYW1lIGFzIGBkaWFnKHMkZCklKiV0KHMkdilgID8KCkEpIGBzJGQgJSolIHQocyR2KWAKQikgYHMkZCAqIHQocyR2KWAKQykgYHQocyRkICogcyR2KWAKRCkgYHMkdiAqIHMkZGAKCgpgYGB7cn0Kb3JpZyA9IGRpYWcocyRkKSUqJXQocyR2KQphbnNCID0gIHMkZCAqIHQocyR2KQpgYGAKCjMuIElmIHdlIGRlZmluZSBgdmQgPSB0KHMkZCAqIHQocyR2KSlgLCB0aGVuIHdoaWNoIG9mIHRoZSBmb2xsb3dpbmcgaXMgbm90IHRoZSBzYW1lIFVEVuKKpCA/CgpBKSBgdGNyb3NzcHJvZChzJHUsdmQpYApCKSBgcyR1ICUqJSBzJGQgKiB0KHMkdilgCkMpIGBzJHUgJSolIChzJGQgKiB0KHMkdikgKWAKRCkgYHRjcm9zc3Byb2QoIHQoIHMkZCp0KHMkdSkpICwgcyR2KWAKCmBgYHtyfQp2ZCA9IHQocyRkICogdChzJHYpKQphMyA9IHRjcm9zc3Byb2QocyR1LHZkKSAjdGNyb3NzcHJvZCB0cmFuc3Bvc2VzIHRoZSBzZWNvbmQgYXJndW1lbnQgaW5zdGVhZCBvZiB0aGUgZmlyc3QuIApkaW0oYTMpCmBgYApgYGB7cn0KYjMgPSBzJHUgJSolIHMkZCAqIHQocyR2KQpgYGAKCgpgYGB7cn0KYzM9IHMkdSAlKiUgKHMkZCAqIHQocyR2KSApCmRpbShjMykKCmBgYApgYGB7cn0KZDMgPSB0Y3Jvc3Nwcm9kKCB0KCBzJGQqdChzJHUpKSAsIHMkdikKZGltKGQzKQpgYGAKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiU1ZEIEV4Y2VyY2lzZXMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiogaHR0cDovL2dlbm9taWNzY2xhc3MuZ2l0aHViLmlvL2Jvb2svcGFnZXMvc3ZkLmh0bWwKKiBodHRwOi8vZ2Vub21pY3NjbGFzcy5naXRodWIuaW8vYm9vay9wYWdlcy9zdmRfZXhlcmNpc2VzLmh0bWwKCmBgYHtyIGxvYWR9CmxpYnJhcnkodGlzc3Vlc0dlbmVFeHByZXNzaW9uKQpkYXRhKHRpc3N1ZXNHZW5lRXhwcmVzc2lvbikKYGBgCgoxLiBDb21wdXRlciB0aGUgc3ZkIG9mIGUKCmBgYHtyfQpzID0gc3ZkKGUpCmBgYAoKY29tcHV0ZSB0aGUgcm93IG1lYW5zIG9mIGUKCmBgYHtyfQpybSA9IHJvd01lYW5zKGUpCmBgYAoKd2hhdCdzIHRoZSBjb3JyZWxhdGlvbiBvZiB0aGUgZmlyc3QgY29sdW1uIG9mIGBVYCBhbmQgYHJtYD8gCgpgYGB7cn0KY29yKHMkdVssMV0sIHJtKQpgYGAKCklmIHdlIGNoYW5nZSB0aGVzZSBtZWFucywgdGhlIGRpc3RhbmNlcyBiZXR3ZWVuIGNvbHVtbnMgZG8gbm90IGNoYW5nZS4gRm9yIGV4YW1wbGUsIGNoYW5naW5nIHRoZSBtZWFucyBkb2VzIG5vdCBjaGFuZ2UgdGhlIGRpc3RhbmNlczoKCmBgYHtyfQpuZXdtZWFucyA9IHJub3JtKG5yb3coZSkpICNnZW4gc29tZSBuZXcgdmFsdWVzCm5ld2UgPSBuZXdtZWFucyArIGUKc3FydChjcm9zc3Byb2QoZVssM10tZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIHR3byBjb2x1bW5zIGluIGUKc3FydChjcm9zc3Byb2QobmV3ZVssM10tbmV3ZVssNDVdKSkgI2Rpc3RhbmNlIGNhbGMgZm9yIHR3byBjb2x1bW5zIGluIG5ld2UKYGBgCgpBbHNvIG5vdGUgdGhhdCB0aGlzIHdvcmtzIGIvYyB0aGUgZGlmZmVyZW5jZSBkb2Vzbid0IGNoYW5nZS4gCgpgYGB7cn0KZGlmZl9lID0gZVssM10tZVssNDVdCmRpZmZfbmUgPSBuZXdlWywzXS1uZXdlWyw0NV0KZGlmZl9lWzA6MjBdIC0gZGlmZl9uZVswOjIwXSAgIwpgYGAKClNvIHdlIG1pZ2h0IGFzIHdlbGwgbWFrZSB0aGUgbWVhbiBvZiBlYWNoIHJvdyAwLCBzaW5jZSBpdCBkb2VzIG5vdCBoZWxwIHVzIGFwcHJveGltYXRlIHRoZSBjb2x1bW4gZGlzdGFuY2VzLiBXZSB3aWxsIGRlZmluZSB5IGFzIHRoZSAqZGV0cmVuZGVkKiBlIGFuZCByZWNvbXB1dGUgdGhlIFNWRDoKCmBgYHtyfQp5ID0gZSAtIHJvd01lYW5zKGUpCnMgPSBzdmQoeSkKYGBgCgpXZSBzaG93ZWQgdGhhdCBgVURW4oqkYCBpcyBlcXVhbCB0byB5IHVwIHRvIG51bWVyaWNhbCBlcnJvcjoKCmBgYHtyfQpyZXNpZCA9IHkgLSBzJHUgJSolIGRpYWcocyRkKSAlKiUgdChzJHYpCmBgYAoKVGhlIGFib3ZlIGNhbiBiZSBtYWRlIG1vcmUgZWZmaWNpZW50IGluIHR3byB3YXlzLiBGaXJzdCwgdXNpbmcgdGhlIGNyb3NzcHJvZCBhbmQsIHNlY29uZCwgbm90IGNyZWF0aW5nIGEgZGlhZ29uYWwgbWF0cml4LiBJbiBSLCB3ZSBjYW4gbXVsdGlwbHkgbWF0cmljZXMgeCBieSB2ZWN0b3IgYS4gVGhlIHJlc3VsdCBpcyBhIG1hdHJpeCB3aXRoIHJvd3MgaSBlcXVhbCB0byBgeFtpLF0qYVtpXWAuCgpUaGlzIG1lYW5zIHRoYXQgd2UgZG9u4oCZdCBoYXZlIHRvIGNvbnZlcnQgcyRkIGludG8gYSBtYXRyaXguCgoyLiBXaGljaCBvZiB0aGUgZm9sbG93aW5nIGdpdmVzIHVzIHRoZSBzYW1lIGFzIGBkaWFnKHMkZCklKiV0KHMkdilgID8KCkEpIGBzJGQgJSolIHQocyR2KWAKQikgYHMkZCAqIHQocyR2KWAKQykgYHQocyRkICogcyR2KWAKRCkgYHMkdiAqIHMkZGAKCgpgYGB7cn0Kb3JpZyA9IGRpYWcocyRkKSUqJXQocyR2KQphbnNCID0gIHMkZCAqIHQocyR2KQpgYGAKCjMuIElmIHdlIGRlZmluZSBgdmQgPSB0KHMkZCAqIHQocyR2KSlgLCB0aGVuIHdoaWNoIG9mIHRoZSBmb2xsb3dpbmcgaXMgbm90IHRoZSBzYW1lIFVEVuKKpCA/CgpBKSBgdGNyb3NzcHJvZChzJHUsdmQpYApCKSBgcyR1ICUqJSBzJGQgKiB0KHMkdilgCkMpIGBzJHUgJSolIChzJGQgKiB0KHMkdikgKWAKRCkgYHRjcm9zc3Byb2QoIHQoIHMkZCp0KHMkdSkpICwgcyR2KWAKCmBgYHtyfQp2ZCA9IHQocyRkICogdChzJHYpKQphMyA9IHRjcm9zc3Byb2QocyR1LHZkKSAjdGNyb3NzcHJvZCB0cmFuc3Bvc2VzIHRoZSBzZWNvbmQgYXJndW1lbnQgaW5zdGVhZCBvZiB0aGUgZmlyc3QuIApkaW0oYTMpCmBgYApgYGB7cn0KYjMgPSBzJHUgJSolIHMkZCAqIHQocyR2KQpgYGAKCgpgYGB7cn0KYzM9IHMkdSAlKiUgKHMkZCAqIHQocyR2KSApCmRpbShjMykKCmBgYApgYGB7cn0KZDMgPSB0Y3Jvc3Nwcm9kKCB0KCBzJGQqdChzJHUpKSAsIHMkdikKZGltKGQzKQpgYGAKCjQuIExldCBgeiA9IHMkZCAqIHQocyR2KWAuIFdlIHNob3dlZCBkZXJpdmF0aW9uIGRlbW9uc3RyYXRpbmcgdGhhdCBiZWNhdXNlIGBVYCBpcyBvcnRob2dvbmFsLCB0aGUgZGlzdGFuY2UgYmV0d2VlbiBgZVssM11gIGFuZCBgZVssNDVdYCBpcyB0aGUgc2FtZSBhcyB0aGUgZGlzdGFuY2UgYmV0d2VlbiBgeVssM11gIGFuZCBgeVssNDVdYCAoYGVgIGFmdGVyIHN1YnRyYWN0aW5nIG91dCB0aGUgcm93TWVhbnMpIC4gd2hpY2ggaXMgdGhlIHNhbWUgYXMgYHZkWywzXWAgYW5kIGB2ZFssNDVdYCAoSSBiZWxpZXZlIHRoZXJlIGlzIGEgdHlwbyBoZXJlKQoKCgpgYGB7cn0KIyBXaGljaCB2ZXJzaW9uIG9mIGBzYCBhcmUgd2UgdGFsa2luZyBhYm91dD8gTGV0J3MgYXNzdW1lCnMgPSBzdmQoZSkKCnZkID0gdChzJGQgKiB0KHMkdikpCgp2ZF9kaXN0ID0gc3FydChjcm9zc3Byb2QodmRbLDNdLXZkWyw0NV0pKSAKZV9kaXN0ICA9IHNxcnQoY3Jvc3Nwcm9kKGVbLDNdLWVbLDQ1XSkpCnlfZGlzdCAgPSBzcXJ0KGNyb3NzcHJvZCh5WywzXS15Wyw0NV0pKQpjKHZkX2Rpc3QsIGVfZGlzdCwgeV9kaXN0KSAjSSBkaWRuJ3QgZ2V0IHRoZSBzYW1lIGFuc3dlciBoZXJlLi4uLgoKdmRfZGlzdCA9IHNxcnQoY3Jvc3Nwcm9kKHZkWzMsXS12ZFs0NSxdKSkgI29uY2UgSSBjaGFuZ2VkIHRoaXMgdG8gcm93IGRpc3RhbmNlcyBudW1iZXJzIG1hdGNoZWQgdXAuIApjKHZkX2Rpc3QsIGVfZGlzdCwgeV9kaXN0KQpgYGAKYGBge3J9CnogPSBzJGQgKiB0KHMkdikKel9kaXN0X3Jvd3MgPSBzcXJ0KGNyb3NzcHJvZCh6WzMsXS16WzQ1LF0pKQp6X2Rpc3Rfcm93cwoKel9kaXN0X2NvbHMgPSBzcXJ0KGNyb3NzcHJvZCh6WywzXS16Wyw0NV0pKQp6X2Rpc3RfY29scwpgYGAKCk5vdGUgdGhhdCB0aGUgY29sdW1ucyB6IGhhdmUgMTg5IGVudHJpZXMsIGNvbXBhcmVkIHRvIDIyLDIxNSBmb3IgZS4KCmBgYHtyfQpkaW0oeikKYGBgCgoKV2hhdCBpcyB0aGUgZGlmZmVyZW5jZSwgaW4gYWJzb2x1dGUgdmFsdWUsIGJldHdlZW4gdGhlIGFjdHVhbCBkaXN0YW5jZToKCmBgYApzcXJ0KGNyb3NzcHJvZChlWywzXS1lWyw0NV0pKQpgYGAKCmFuZCB0aGUgYXBwcm94aW1hdGlvbiB1c2luZyBvbmx5IHR3byBkaW1lbnNpb25zIG9mIGB6YD8KCmBgYHtyfQp6X2Rpc3QyID0gc3FydChjcm9zc3Byb2QoelszLDE6Ml0tels0NSwxOjJdKSkKYGBgCgpUT0RPOiBDb21lIHVwIHdpdGggYW4gYW5zd2VyIGhlcmUKCjUuIEhvdyBtYW55IGRpbWVuc2lvbnMgZG8gd2UgbmVlZCB0byB1c2UgZm9yIHRoZSBhcHByb3hpbWF0aW9uIGluIGV4ZXJjaXNlIDQgdG8gYmUgd2l0aGluIDEwJT8KCkNvbnNpZGVyIGdyYXBoaW5nIHRoZSBwZXJjZW50IG9mIHZhcmlhbmNlIGV4cGxhaW5lZCBieSBwcmluY2lwYWwgY29tcG9uZW50cyBoZXJlLiBQaWNrIHRoZSB0b3AgTiB0aGF0IGV4cGxhaW4gOTAlIG9mIHRoZSB2YXJpYW5jZS4gRG9lcyB0aGF0IGdldCB5b3UgdGhlIHJpZ2h0IGFuc3dlcj8gCgoK</div>
 
 
 
