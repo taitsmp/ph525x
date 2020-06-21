@@ -1,0 +1,51 @@
+---
+title: "Adjusting for Batch Effects with Linear Models"
+output: html_notebook
+---
+
+http://genomicsclass.github.io/book/pages/adjusting_with_linear_models.html
+
+```{r}
+library(devtools)
+install_github("genomicsclass/GSE5859Subset")
+BiocManager::install("qvalue")
+```
+
+
+```{r}
+library(GSE5859Subset)
+data(GSE5859Subset)
+
+```
+```{r}
+month <- format(sampleInfo$date,"%m")
+table(sampleInfo$group, month)
+```
+
+```{r}
+library(qvalue)
+library(genefilter)
+
+# t tests let you compare a test statistic (usually the mean) between two sample populations
+# to see if they are the same.  We're looking at expression for each of 24 genes across two 
+# groups to guage how likely it is that the means really are different (and therefore the 
+# populations come from different distributions)
+
+# In the t-test of two independent samples the null hypothesis is that mean1 = mean2 and the
+# alternate hypothesis is that mean1 != meab2.
+
+# small p-values help you reject the null hypothesis
+
+res <- rowttests(geneExpression, as.factor(sampleInfo$group))
+#hist(res$p.value[which(!chr%in%c("chrX","chrY") )],main="",ylim=c(0,1300))
+hist(res$p.value,main="",ylim=c(0,1500))
+
+
+
+```
+
+
+```{r}
+
+```
+
