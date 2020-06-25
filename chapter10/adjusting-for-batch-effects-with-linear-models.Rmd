@@ -5,6 +5,9 @@ output: html_notebook
 
 http://genomicsclass.github.io/book/pages/adjusting_with_linear_models.html
 
+
+> To illustrate how we can adjust for batch effects using statistical methods, we will create a data example in which the outcome of interest is somewhat confounded with batch, but not completely. To aid with the illustration and assessment of the methods we demonstrate, we will also select an outcome for which we have an expectation of what genes should be differentially expressed. Namely, we make sex the outcome of interest and expect genes on the Y chromosome to be differentially expressed. 
+
 ```{r}
 library(devtools)
 install_github("genomicsclass/GSE5859Subset")
@@ -26,6 +29,8 @@ table(sampleInfo$group, month)
 library(qvalue)
 library(genefilter)
 
+chr <- geneAnnotation$CHR
+
 # t tests let you compare a test statistic (usually the mean) between two sample populations
 # to see if they are the same.  We're looking at expression for each of 24 genes across two 
 # groups to guage how likely it is that the means really are different (and therefore the 
@@ -37,8 +42,8 @@ library(genefilter)
 # small p-values help you reject the null hypothesis
 
 res <- rowttests(geneExpression, as.factor(sampleInfo$group))
-#hist(res$p.value[which(!chr%in%c("chrX","chrY") )],main="",ylim=c(0,1300))
-hist(res$p.value,main="",ylim=c(0,1500))
+hist(res$p.value[which(!chr%in%c("chrX","chrY") )],main="",ylim=c(0,1300))
+#hist(res$p.value,main="",ylim=c(0,1500))
 
 
 
@@ -50,10 +55,45 @@ Limma and LM fit.  Batch effects.
 library(limma)
 sex   <- sampleInfo$group
 batch <- format(sampleInfo$date,"%m")
-X <- model.matrix(~sex+batch)
-resLM <- lmFit(geneExpression, X)
+X <- model.matrix(~sex+batch) #adjust for the "batch" variable.
+fitA <- lmFit(geneExpression, X)
 
 # TODO calculate P values
 ```
 
 What's going on here? Need to review this page and better understand q-values. What is the model telling us? How is it correcting for batch effects?  I have some broken code here for how we're selecting specific genes (autosomal or not).
+
+```{r}
+dim( fitA$coef)
+```
+
+```{r}
+summary(fitA)
+```
+
+```{r}
+dim(fitA$stdev.unscaled) #8793 x 3
+k <- 2
+ses <- fitA$stdev.unscaled[,k]
+ttest <- fitA$coef[,k]/ses # not sure what's happening here
+pvals <- 2*pt(-abs(ttest),fitA$df) #pt gives the distribution function for the t-test
+```
+
+```{r}
+pvals[1:10]
+```
+
+```{r}
+summary(pvals)
+
+```
+
+```{r}
+hapv = pvals[pvals < 0.05]
+hapv #too few?
+```
+
+### Left off
+
+* Try more plots. Draw qvalue line
+* Try Combat
