@@ -96,4 +96,5 @@ hapv #too few?
 ### Left off
 
 * Try more plots. Draw qvalue line
+* How did the second model.matrix allow your to adjust for batch effects with your linear model. 
 * Try Combat
